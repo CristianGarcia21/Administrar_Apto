@@ -105,13 +105,14 @@ export default function Reportes() {
   const serviciosHabitacion = useServiciosStore((s) => s.serviciosHabitacion)
   const historial       = useHistorialStore((s) => s.historial)
   const mesActivo       = useUiStore((s) => s.mesActivo)
+  const mesVisualizado  = useUiStore((s) => s.mesVisualizado)
   const ipcHistorial    = useAppSettingsStore((s) => s.ipcHistorial ?? [])
 
-  // ── KPIs del mes activo ──
-  const pagosPagados = pagos.filter((p) => p.estado === 'pagado' && p.mes === mesActivo)
+  // ── KPIs del mes visualizado ──
+  const pagosPagados = pagos.filter((p) => p.estado === 'pagado' && p.mes === mesVisualizado)
   const ingresoReal  = pagosPagados.reduce((t, p) => t + p.monto, 0)
   const gastoTotal   = serviciosPublicos
-    .filter((s) => s.mes === mesActivo)
+    .filter((s) => s.mes === mesVisualizado)
     .reduce((t, s) => t + s.monto, 0)
   const margenNeto   = ingresoReal - gastoTotal
   const margenPct    = ingresoReal > 0 ? Math.round((margenNeto / ingresoReal) * 100) : 0
@@ -119,8 +120,8 @@ export default function Reportes() {
   const ocupadas  = habitaciones.filter((h) => h.estado === 'ocupada').length
   const ocupacion = habitaciones.length ? Math.round((ocupadas / habitaciones.length) * 100) : 0
 
-  const pagosPuntuales = pagos.filter((p) => p.mes === mesActivo && p.diasMora === 0).length
-  const pagosTotalesMes = pagos.filter((p) => p.mes === mesActivo).length
+  const pagosPuntuales = pagos.filter((p) => p.mes === mesVisualizado && p.diasMora === 0).length
+  const pagosTotalesMes = pagos.filter((p) => p.mes === mesVisualizado).length
   const puntualidad = pagosTotalesMes ? Math.round((pagosPuntuales / pagosTotalesMes) * 100) : 0
 
   // ── Proyeccion anual mejorada: promedio del historial o mes actual ──
@@ -140,10 +141,10 @@ export default function Reportes() {
     ? Math.round(((ingresoReal - mesAnteriorSnap.ingresos) / mesAnteriorSnap.ingresos) * 100)
     : null
 
-  // ── Tendencia: historial guardado + mes actual en vivo ──
+  // ── Tendencia: historial guardado + mes visualizado en vivo ──
   const mesActivoLabel = new Date(
-    Number(mesActivo.split('-')[0]),
-    Number(mesActivo.split('-')[1]) - 1,
+    Number(mesVisualizado.split('-')[0]),
+    Number(mesVisualizado.split('-')[1]) - 1,
     1,
   ).toLocaleString('es-CO', { month: 'short' }).replace('.', '')
 

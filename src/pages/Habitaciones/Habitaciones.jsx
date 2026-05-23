@@ -32,6 +32,7 @@ export default function Habitaciones() {
   const ipcAnual          = useAppSettingsStore((s) => s.ipcAnual)
   const addIpcAnio        = useAppSettingsStore((s) => s.addIpcAnio)
   const mesActivo         = useUiStore((s) => s.mesActivo)
+  const mesVisualizado    = useUiStore((s) => s.mesVisualizado)
 
   const [simulatedIpc, setSimulatedIpc] = useState(ipcAnual)
 
@@ -49,8 +50,8 @@ export default function Habitaciones() {
   })
 
   const recomConfig = useMemo(
-    () => ({ ipcAnual, objetivoMargen: 20, mesActivo }),
-    [ipcAnual, mesActivo],
+    () => ({ ipcAnual, objetivoMargen: 20, mesActivo: mesVisualizado }),
+    [ipcAnual, mesVisualizado],
   )
 
   const recomendaciones = useRecomendacionPrecios(

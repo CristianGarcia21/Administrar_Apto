@@ -1,0 +1,17 @@
+{
+  "name": "RentApp | Gestión Inteligente",
+  "short_name": "RentApp",
+  "description": "Plataforma premium de gestión financiera para propietarios de apartamentos y servicios.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

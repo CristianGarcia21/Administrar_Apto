@@ -42,11 +42,10 @@ export default function Inquilinos() {
   const updateHabitacion = useHabitacionesStore((s) => s.updateHabitacion)
   const pagos           = usePagosStore((s) => s.pagos)
   const addPago         = usePagosStore((s) => s.addPago)
-  // FIX #5: usar mesActivo, no new Date()
-  const mesActivo       = useUiStore((s) => s.mesActivo)
+  const mesVisualizado  = useUiStore((s) => s.mesVisualizado)
 
   // ── KPIs reales (FIX #1) ──
-  const pagosMes    = pagos.filter((p) => p.mes === mesActivo)
+  const pagosMes    = pagos.filter((p) => p.mes === mesVisualizado)
   const pagados     = pagosMes.filter((p) => p.estado === 'pagado').length
   const conMora     = pagosMes.filter((p) => p.diasMora > 0).length
   const pendientes  = pagosMes.filter((p) => p.estado === 'pendiente' || p.estado === 'vencido').length
@@ -56,9 +55,8 @@ export default function Inquilinos() {
 
   const inquilinosTable = filteredInquilinos.map((inquilino) => {
     const habitacion = habitaciones.find((h) => h.id === inquilino.habitacionId)
-    // FIX #5: filtrar pago por mesActivo
     const pago = pagos.find(
-      (p) => p.inquilinoId === inquilino.id && p.mes === mesActivo,
+      (p) => p.inquilinoId === inquilino.id && p.mes === mesVisualizado,
     )
 
     return {
