@@ -34,11 +34,7 @@ export default function Habitaciones() {
   const mesActivo         = useUiStore((s) => s.mesActivo)
   const mesVisualizado    = useUiStore((s) => s.mesVisualizado)
 
-  const [simulatedIpc, setSimulatedIpc] = useState(ipcAnual)
-
-  useEffect(() => {
-    setSimulatedIpc(ipcAnual)
-  }, [ipcAnual])
+  const [metaRecaudo, setMetaRecaudo] = useState(120000)
 
   const habitaciones = habitacionesBase.map((hab) => {
     const inq = inquilinos.find((i) => i.id === hab.inquilinoId)
@@ -49,9 +45,23 @@ export default function Habitaciones() {
     }
   })
 
+  const habitacionesOcupadas = useMemo(() => {
+    return habitaciones.filter((h) => h.estado === 'ocupada' && h.inquilinoId)
+  }, [habitaciones])
+
+  const recaudoActualTotal = useMemo(() => {
+    return habitacionesOcupadas.reduce((sum, h) => sum + h.precioActual, 0)
+  }, [habitacionesOcupadas])
+
+  const simulatedIpc = recaudoActualTotal > 0 ? (metaRecaudo / recaudoActualTotal) * 100 : 0
+
   const recomConfig = useMemo(
-    () => ({ ipcAnual, objetivoMargen: 20, mesActivo: mesVisualizado }),
-    [ipcAnual, mesVisualizado],
+    () => ({ 
+      ipcAnual: showSimulator ? simulatedIpc : ipcAnual, 
+      objetivoMargen: 20, 
+      mesActivo: mesVisualizado 
+    }),
+    [ipcAnual, showSimulator, simulatedIpc, mesVisualizado],
   )
 
   const recomendaciones = useRecomendacionPrecios(
@@ -62,9 +72,7 @@ export default function Habitaciones() {
     (r) => r.recomendacion.urgencia !== 'ninguna',
   ).length
 
-  const habitacionesOcupadas = useMemo(() => {
-    return habitaciones.filter((h) => h.estado === 'ocupada' && h.inquilinoId)
-  }, [habitaciones])
+
 
   const { totalIncrementoMensual, totalIncrementoAnual } = useMemo(() => {
     let mensual = 0
@@ -160,10 +168,10 @@ export default function Habitaciones() {
             </div>
             <div>
               <h2 className="text-base font-bold" style={{ fontFamily: 'var(--font-display)' }}>
-                Simulador de Impacto IPC
+                Calculadora Inversa de Meta (IPC)
               </h2>
               <p className="text-xs text-textMuted mt-0.5">
-                Proyecta ingresos y ajusta arriendos basados en simulación de IPC.
+                Ingresa el monto exacto que necesitas subir, y el sistema hallará el % ideal.
               </p>
             </div>
           </div>
@@ -175,7 +183,7 @@ export default function Habitaciones() {
                 color: 'var(--text-primary)',
               }}
             >
-              IPC Sim: {simulatedIpc.toFixed(1)}%
+              Meta: {formatCOP(metaRecaudo)}
             </span>
             {showSimulator ? (
               <ChevronUp className="h-5 w-5 text-textMuted" />
@@ -200,31 +208,22 @@ export default function Habitaciones() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-bold uppercase tracking-[0.1em] text-textMuted">
-                      Tasa de IPC Simulado
+                      Meta Extra a Recaudar
                     </label>
                     <span className="text-2xl font-bold font-mono text-accent" style={{ color: 'var(--accent)' }}>
-                      {simulatedIpc.toFixed(1)}%
+                      {simulatedIpc.toFixed(2)}%
                     </span>
                   </div>
 
                   <div className="relative pt-2">
                     <input
-                      type="range"
-                      min="0"
-                      max="15"
-                      step="0.1"
-                      value={simulatedIpc}
-                      onChange={(e) => setSimulatedIpc(parseFloat(e.target.value))}
-                      className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-border-subtle"
-                      style={{
-                        accentColor: 'var(--accent)',
-                      }}
+                      type="number"
+                      value={metaRecaudo}
+                      onChange={(e) => setMetaRecaudo(Number(e.target.value) || 0)}
+                      className="w-full rounded-xl border border-border bg-cardMuted/30 px-4 py-3.5 font-mono text-xl font-bold text-textMain shadow-sm outline-none transition-all focus:border-[color:var(--accent)] focus:bg-card focus:ring-4 focus:ring-[color:var(--accent-dim)]"
                     />
-                    <div className="flex justify-between text-[10px] font-mono text-textMuted mt-1">
-                      <span>0% (Sin subida)</span>
-                      <span>5%</span>
-                      <span>10%</span>
-                      <span>15% (Máx)</span>
+                    <div className="text-[11px] text-textMuted mt-2">
+                      Si el dueño te subió el arriendo, escríbelo arriba. El sistema aplicará un incremento ponderado del <span className="font-bold text-textMain">{simulatedIpc.toFixed(2)}%</span> a cada inquilino para cubrir la meta exacta.
                     </div>
                   </div>
 

@@ -101,23 +101,9 @@ export default function Servicios() {
     (total, servicio) => total + servicio.monto,
     0,
   )
-  const pagaInquilinos = servicios.reduce(
-    (total, servicio) =>
-      total + servicio.monto * (servicio.porcentajeInquilinos / 100),
-    0,
-  )
-  const pagaArrendador = totalServicios - pagaInquilinos
 
   const handleRegistrar = (servicio) => {
     setPagoTarget(servicio)
-  }
-
-  const handleExportReparto = () => {
-    toast.success(
-      `Reparto calculado: ${formatCOP(pagaInquilinos)} inquilinos, ${formatCOP(
-        pagaArrendador,
-      )} arrendador`,
-    )
   }
 
   const [mesY, mesM] = mesVisualizado.split('-').map(Number)
@@ -137,13 +123,9 @@ export default function Servicios() {
           </p>
         </div>
         <div className="rounded-xl border border-border bg-cardMuted/70 px-4 py-3 text-sm text-textMuted">
-          <p className="text-xs uppercase tracking-[0.2em]">Total del mes</p>
-          <p className="mt-2 font-mono text-xl text-accent">
+          <p className="text-xs uppercase tracking-[0.2em]">Total Gastos</p>
+          <p className="font-mono text-xl font-bold" style={{ color: 'var(--accent)' }}>
             {formatCOP(totalServicios)}
-          </p>
-          <p className="mt-1 flex items-center gap-2 text-xs">
-            <ArrowUpRight className="h-3 w-3" />
-            {serviciosPublicos.filter((s) => s.estado === 'pagado').length} de {serviciosPublicos.length} pagados
           </p>
         </div>
       </div>
@@ -154,50 +136,6 @@ export default function Servicios() {
         onEdit={(servicio) => setEditing(servicio)}
       />
 
-      <section className="card px-6 py-5">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold">Distribucion del mes</h2>
-            <p className="mt-2 text-textMuted">
-              Calcula cuanto cubren los inquilinos y cuanto asumes tu.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={handleExportReparto}
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-cardMuted/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-textMuted"
-          >
-            <Calculator className="h-4 w-4" />
-            Calcular reparto
-          </button>
-        </div>
-        <div className="mt-5 grid gap-4 md:grid-cols-3">
-          <div className="rounded-xl border border-border bg-cardMuted/70 px-4 py-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-textMuted">
-              Total servicios
-            </p>
-            <p className="mt-2 font-mono text-xl text-accent">
-              {formatCOP(totalServicios)}
-            </p>
-          </div>
-          <div className="rounded-xl border border-border bg-cardMuted/70 px-4 py-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-textMuted">
-              Pagan inquilinos
-            </p>
-            <p className="mt-2 font-mono text-xl text-success">
-              {formatCOP(pagaInquilinos)}
-            </p>
-          </div>
-          <div className="rounded-xl border border-border bg-cardMuted/70 px-4 py-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-textMuted">
-              Pagas tu
-            </p>
-            <p className="mt-2 font-mono text-xl text-primary">
-              {formatCOP(pagaArrendador)}
-            </p>
-          </div>
-        </div>
-      </section>
 
       <section className="card px-6 py-5">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">

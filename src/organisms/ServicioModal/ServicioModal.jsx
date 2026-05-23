@@ -151,14 +151,7 @@ export default function ServicioModal({
             </select>
           </div>
 
-          <div className="relative">
-            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">% Pagan inquilinos</label>
-            <input
-              type="number"
-              {...register('porcentajeInquilinos', { valueAsNumber: true })}
-              className="w-full rounded-xl border border-border bg-cardMuted/30 px-4 py-3.5 font-mono text-sm font-bold text-textMain shadow-sm outline-none transition-all focus:border-[color:var(--accent)] focus:bg-card focus:ring-4 focus:ring-[color:var(--accent-dim)]"
-            />
-          </div>
+
           
           <div className="relative md:col-span-2">
             <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Referencia (Referencia de Pago / ID)</label>
