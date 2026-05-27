@@ -45,10 +45,11 @@ export default function InquilinoModal({
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 mt-2">
         <div className="grid gap-5 md:grid-cols-2">
-          
+
           <div className="relative">
-            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Nombre completo</label>
+            <label htmlFor="inq-nombre" className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Nombre completo</label>
             <input
+              id="inq-nombre"
               {...register('nombre')}
               className="w-full rounded-xl border border-border bg-cardMuted/30 px-4 py-3.5 text-sm font-semibold text-textMain shadow-sm outline-none transition-all focus:border-[color:var(--accent)] focus:bg-card focus:ring-4 focus:ring-[color:var(--accent-dim)]"
             />
@@ -58,16 +59,18 @@ export default function InquilinoModal({
           </div>
 
           <div className="relative">
-            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Telefono</label>
+            <label htmlFor="inq-telefono" className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Telefono</label>
             <input
+              id="inq-telefono"
               {...register('telefono')}
               className="w-full rounded-xl border border-border bg-cardMuted/30 px-4 py-3.5 font-mono text-sm font-bold text-textMain shadow-sm outline-none transition-all focus:border-[color:var(--accent)] focus:bg-card focus:ring-4 focus:ring-[color:var(--accent-dim)]"
             />
           </div>
 
           <div className="relative">
-            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Email</label>
+            <label htmlFor="inq-email" className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Email</label>
             <input
+              id="inq-email"
               {...register('email')}
               className="w-full rounded-xl border border-border bg-cardMuted/30 px-4 py-3.5 text-sm font-semibold text-textMain shadow-sm outline-none transition-all focus:border-[color:var(--accent)] focus:bg-card focus:ring-4 focus:ring-[color:var(--accent-dim)]"
             />
@@ -77,16 +80,18 @@ export default function InquilinoModal({
           </div>
 
           <div className="relative">
-            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Cedula</label>
+            <label htmlFor="inq-cedula" className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Cedula</label>
             <input
+              id="inq-cedula"
               {...register('cedula')}
               className="w-full rounded-xl border border-border bg-cardMuted/30 px-4 py-3.5 font-mono text-sm font-bold text-textMain shadow-sm outline-none transition-all focus:border-[color:var(--accent)] focus:bg-card focus:ring-4 focus:ring-[color:var(--accent-dim)]"
             />
           </div>
 
           <div className="relative">
-            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Habitacion asignada</label>
+            <label htmlFor="inq-habitacion" className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Habitacion asignada</label>
             <select
+              id="inq-habitacion"
               {...register('habitacionId')}
               className="w-full appearance-none rounded-xl border border-border bg-cardMuted/30 px-4 py-3.5 text-sm font-semibold text-textMain shadow-sm outline-none transition-all focus:border-[color:var(--accent)] focus:bg-card focus:ring-4 focus:ring-[color:var(--accent-dim)]"
             >
@@ -99,8 +104,9 @@ export default function InquilinoModal({
           </div>
 
           <div className="relative">
-            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Dia de vencimiento</label>
+            <label htmlFor="inq-dia" className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Dia de vencimiento</label>
             <input
+              id="inq-dia"
               type="number"
               {...register('diaVencimiento', { valueAsNumber: true })}
               className="w-full rounded-xl border border-border bg-cardMuted/30 px-4 py-3.5 font-mono text-sm font-bold text-textMain shadow-sm outline-none transition-all focus:border-[color:var(--accent)] focus:bg-card focus:ring-4 focus:ring-[color:var(--accent-dim)]"

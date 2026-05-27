@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 export default function ProgressRing({ value, size = 64, color = '#1f5e7a' }) {
   const stroke = 6
@@ -16,7 +16,7 @@ export default function ProgressRing({ value, size = 64, color = '#1f5e7a' }) {
         cx={size / 2}
         cy={size / 2}
       />
-      <motion.circle
+      <m.circle
         stroke={color}
         fill="transparent"
         strokeWidth={stroke}

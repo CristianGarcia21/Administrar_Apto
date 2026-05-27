@@ -1,6 +1,6 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState } from 'react'
 import { Plus, Sliders, TrendingUp, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import HabitacionesGrid from '../../organisms/HabitacionesGrid/HabitacionesGrid.jsx'
 import { useRecomendacionPrecios } from '../../hooks/useRecomendacionPrecios.js'
 import { useHabitacionesStore } from '../../store/habitacionesStore.js'
@@ -13,7 +13,11 @@ import HabitacionModal from '../../organisms/HabitacionModal/HabitacionModal.jsx
 import { createId } from '../../utils/id.js'
 import HabitacionDetalleModal from '../../organisms/HabitacionDetalleModal/HabitacionDetalleModal.jsx'
 import ConfirmModal from '../../atoms/ConfirmModal/ConfirmModal.jsx'
+import { formatCOP } from '../../utils/formatCOP.js'
 import toast from 'react-hot-toast'
+
+const DEFAULT_META_RECAUDO = 120_000
+const PRECIO_MINIMO_FACTOR = 0.9
 
 export default function Habitaciones() {
   const [showModal, setShowModal]           = useState(false)
@@ -34,16 +38,19 @@ export default function Habitaciones() {
   const mesActivo         = useUiStore((s) => s.mesActivo)
   const mesVisualizado    = useUiStore((s) => s.mesVisualizado)
 
-  const [metaRecaudo, setMetaRecaudo] = useState(120000)
+  const [metaRecaudo, setMetaRecaudo] = useState(DEFAULT_META_RECAUDO)
 
-  const habitaciones = habitacionesBase.map((hab) => {
-    const inq = inquilinos.find((i) => i.id === hab.inquilinoId)
-    return {
-      ...hab,
-      inquilino: inq ? inq.nombre : null,
-      inquilinoFechaIngreso: inq ? inq.fechaIngreso : null,
-    }
-  })
+  const habitaciones = useMemo(
+    () => habitacionesBase.map((hab) => {
+      const inq = inquilinos.find((i) => i.id === hab.inquilinoId)
+      return {
+        ...hab,
+        inquilino: inq ? inq.nombre : null,
+        inquilinoFechaIngreso: inq ? inq.fechaIngreso : null,
+      }
+    }),
+    [habitacionesBase, inquilinos],
+  )
 
   const habitacionesOcupadas = useMemo(() => {
     return habitaciones.filter((h) => h.estado === 'ocupada' && h.inquilinoId)
@@ -72,8 +79,6 @@ export default function Habitaciones() {
     (r) => r.recomendacion.urgencia !== 'ninguna',
   ).length
 
-
-
   const { totalIncrementoMensual, totalIncrementoAnual } = useMemo(() => {
     let mensual = 0
     habitacionesOcupadas.forEach((hab) => {
@@ -90,6 +95,42 @@ export default function Habitaciones() {
     const year = parseInt(mesActivo.split('-')[0], 10) || new Date().getFullYear()
     addIpcAnio(year, simulatedIpc)
     toast.success(`IPC del año ${year} actualizado a ${simulatedIpc}% en la configuración`)
+  }
+
+  const handleSubmit = (data) => {
+    const precioMinimo = Math.round(data.precioActual * PRECIO_MINIMO_FACTOR)
+    if (editing) {
+      updateHabitacion(editing.id, {
+        nombre: data.nombre,
+        color: data.color,
+        precioActual: data.precioActual,
+        precioMinimo,
+        estado: data.estado,
+        descripcion: data.descripcion,
+      })
+      toast.success('Habitacion actualizada')
+    } else {
+      addHabitacion({
+        id: createId('h'),
+        nombre: data.nombre,
+        color: data.color,
+        precioActual: data.precioActual,
+        precioMinimo,
+        estado: data.estado,
+        inquilinoId: null,
+        descripcion: data.descripcion,
+        amenidades: [],
+        fechaCreacion: new Date().toISOString().slice(0, 10),
+      })
+      toast.success('Habitacion creada')
+    }
+    setEditing(null)
+    setShowModal(false)
+  }
+
+  const handleEdit = (habitacion) => {
+    setEditing(habitacion)
+    setShowModal(true)
   }
 
   const handleDeleteConfirmed = () => {
@@ -132,7 +173,6 @@ export default function Habitaciones() {
         </div>
       </header>
 
-      {/* FIX #2: Banner de recomendaciones con dato real */}
       {recomendacionesActivas > 0 && (
         <div
           className="flex items-center justify-between rounded-2xl border px-5 py-4"
@@ -196,7 +236,7 @@ export default function Habitaciones() {
         {/* Collapsible Content */}
         <AnimatePresence initial={false}>
           {showSimulator && (
-            <motion.div
+            <m.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
@@ -207,16 +247,17 @@ export default function Habitaciones() {
                 {/* Controles del Slider */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold uppercase tracking-[0.1em] text-textMuted">
+                    <label htmlFor="meta-recaudo" className="text-xs font-bold uppercase tracking-[0.1em] text-textMuted">
                       Meta Extra a Recaudar
                     </label>
-                    <span className="text-2xl font-bold font-mono text-accent" style={{ color: 'var(--accent)' }}>
+                    <span className="text-2xl font-bold font-mono" style={{ color: 'var(--accent)' }}>
                       {simulatedIpc.toFixed(2)}%
                     </span>
                   </div>
 
                   <div className="relative pt-2">
                     <input
+                      id="meta-recaudo"
                       type="number"
                       value={metaRecaudo}
                       onChange={(e) => setMetaRecaudo(Number(e.target.value) || 0)}
@@ -255,7 +296,7 @@ export default function Habitaciones() {
                         Ingreso Mensual Extra
                       </p>
                       <p
-                        className="mt-2 text-xl font-bold font-mono text-positive"
+                        className="mt-2 text-xl font-bold font-mono"
                         style={{ color: 'var(--positive)' }}
                       >
                         + ${totalIncrementoMensual.toLocaleString('es-CO')}
@@ -271,7 +312,7 @@ export default function Habitaciones() {
                         Ingreso Anual Extra
                       </p>
                       <p
-                        className="mt-2 text-xl font-bold font-mono text-positive"
+                        className="mt-2 text-xl font-bold font-mono"
                         style={{ color: 'var(--positive)' }}
                       >
                         + ${totalIncrementoAnual.toLocaleString('es-CO')}
@@ -309,8 +350,8 @@ export default function Habitaciones() {
                         </tr>
                       ) : (
                         habitacionesOcupadas.map((hab) => {
-                          const nuevoPrecio = Math.round((hab.precioActual * (1 + simulatedIpc / 100)) / 10000) * 10000;
-                          const dif = nuevoPrecio - hab.precioActual;
+                          const nuevoPrecio = Math.round((hab.precioActual * (1 + simulatedIpc / 100)) / 10000) * 10000
+                          const dif = nuevoPrecio - hab.precioActual
                           return (
                             <tr
                               key={hab.id}
@@ -321,21 +362,21 @@ export default function Habitaciones() {
                               <td className="px-4 py-3 text-right font-mono text-textMuted">
                                 ${hab.precioActual.toLocaleString('es-CO')}
                               </td>
-                              <td className="px-4 py-3 text-right font-mono font-bold text-accent" style={{ color: 'var(--accent)' }}>
+                              <td className="px-4 py-3 text-right font-mono font-bold" style={{ color: 'var(--accent)' }}>
                                 ${nuevoPrecio.toLocaleString('es-CO')}
                               </td>
-                              <td className="px-4 py-3 text-right font-mono font-semibold text-positive" style={{ color: 'var(--positive)' }}>
+                              <td className="px-4 py-3 text-right font-mono font-semibold" style={{ color: 'var(--positive)' }}>
                                 +${dif.toLocaleString('es-CO')}
                               </td>
                             </tr>
-                          );
+                          )
                         })
                       )}
                     </tbody>
                   </table>
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </section>
@@ -343,9 +384,9 @@ export default function Habitaciones() {
       <HabitacionesGrid
         habitaciones={habitaciones}
         recomendaciones={recomendaciones}
-        onEdit={(habitacion) => { setEditing(habitacion); setShowModal(true) }}
-        onDelete={(habitacion) => setConfirmTarget(habitacion)}  // FIX #4
-        onView={(habitacion) => setDetail(habitacion)}
+        onEdit={handleEdit}
+        onDelete={setConfirmTarget}
+        onView={setDetail}
       />
 
       {/* ── Modals ── */}
@@ -355,35 +396,7 @@ export default function Habitaciones() {
             onClose={() => { setEditing(null); setShowModal(false) }}
             title={editing ? 'Editar habitacion' : 'Nueva habitacion'}
             initialValues={editing}
-            onSubmit={(data) => {
-              if (editing) {
-                updateHabitacion(editing.id, {
-                  nombre: data.nombre,
-                  color: data.color,
-                  precioActual: data.precioActual,
-                  precioMinimo: Math.round(data.precioActual * 0.9),
-                  estado: data.estado,
-                  descripcion: data.descripcion,
-                })
-                toast.success('Habitacion actualizada')
-              } else {
-                addHabitacion({
-                  id: createId('h'),
-                  nombre: data.nombre,
-                  color: data.color,
-                  precioActual: data.precioActual,
-                  precioMinimo: Math.round(data.precioActual * 0.9),
-                  estado: data.estado,
-                  inquilinoId: null,
-                  descripcion: data.descripcion,
-                  amenidades: [],
-                  fechaCreacion: new Date().toISOString().slice(0, 10),
-                })
-                toast.success('Habitacion creada')
-              }
-              setEditing(null)
-              setShowModal(false)
-            }}
+            onSubmit={handleSubmit}
           />
         )}
 

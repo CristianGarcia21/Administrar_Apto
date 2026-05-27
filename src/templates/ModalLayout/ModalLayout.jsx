@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { X } from 'lucide-react'
 import { getAnimationConfig } from '../../utils/accessibility.js'
 
@@ -9,14 +9,14 @@ const prefersReducedMotion = window.matchMedia(
 export default function ModalLayout({ title, description, onClose, children }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6">
-      <motion.div
+      <m.div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={getAnimationConfig({ duration: 0.2 })}
       />
-      <motion.div
+      <m.div
         className="relative w-full max-w-2xl overflow-hidden rounded-[18px] border border-border bg-card shadow-[0_30px_80px_rgba(0,0,0,0.45)]"
         initial={{
           opacity: 0,
@@ -51,7 +51,7 @@ export default function ModalLayout({ title, description, onClose, children }) {
           </button>
         </div>
         <div className="px-6 py-5">{children}</div>
-      </motion.div>
+      </m.div>
     </div>
   )
 }

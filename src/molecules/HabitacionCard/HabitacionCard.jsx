@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { ArrowUpRight, Edit3, Trash2, Users } from 'lucide-react'
 import ProgressRing from '../../atoms/ProgressRing/ProgressRing.jsx'
 import Badge from '../../atoms/Badge/Badge.jsx'
@@ -24,7 +24,7 @@ export default function HabitacionCard({
   const ocupacion = estado === 'ocupada' ? 100 : estado === 'libre' ? 0 : 40
 
   return (
-    <motion.article
+    <m.article
       initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 16 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={prefersReducedMotion ? {} : { y: -5 }}
@@ -42,13 +42,13 @@ export default function HabitacionCard({
           </h3>
           <p className="mt-1 text-sm text-textMuted">{habitacion.descripcion}</p>
         </div>
-        <motion.span
+        <m.span
           whileHover={prefersReducedMotion ? {} : { scale: 1.06 }}
           transition={{ type: 'spring', stiffness: 400, damping: 15 }}
           className="rounded-xl border border-border bg-cardMuted/70 px-3 py-2 cursor-pointer flex items-center justify-center flex-shrink-0"
         >
           <ProgressRing value={ocupacion} color={habitacion.color} size={54} />
-        </motion.span>
+        </m.span>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
@@ -62,7 +62,7 @@ export default function HabitacionCard({
       </div>
 
       {recomendacion?.debeSubir && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1, duration: 0.3 }}
@@ -80,7 +80,7 @@ export default function HabitacionCard({
             <ArrowUpRight className="h-4 w-4 animate-pulse" />
             {recomendacion.incrementoPorcentaje.toFixed(1)}%
           </span>
-        </motion.div>
+        </m.div>
       )}
 
       <div className="mt-auto flex flex-wrap gap-2">
@@ -104,7 +104,7 @@ export default function HabitacionCard({
           Eliminar
         </Button>
       </div>
-    </motion.article>
+    </m.article>
   )
 }
 

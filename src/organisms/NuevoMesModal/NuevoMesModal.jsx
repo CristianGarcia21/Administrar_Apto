@@ -107,6 +107,7 @@ function StepIPC({ habitaciones, ipcActual, anioAjuste, onConfirm, onSkip }) {
               max="30"
               value={ipc}
               onChange={(e) => recalcular(e.target.value)}
+              aria-label={`IPC ${anioAjuste - 1} en porcentaje`}
               className="w-20 rounded-xl border border-border bg-card px-3 py-2 text-right font-mono text-lg font-bold text-accent outline-none focus:border-accent"
             />
             <span className="text-lg font-bold text-textMuted">%</span>
@@ -146,6 +147,7 @@ function StepIPC({ habitaciones, ipcActual, anioAjuste, onConfirm, onSkip }) {
                       [hab.id]: Number(e.target.value),
                     }))
                   }
+                  aria-label={`Precio con IPC para ${hab.nombre}`}
                   className="w-28 rounded-lg border border-border bg-cardMuted px-2 py-1 text-right font-mono text-sm text-accent outline-none focus:border-accent"
                 />
                 <p className="mt-0.5 text-[11px]" style={{ color: 'var(--positive)' }}>
@@ -160,12 +162,14 @@ function StepIPC({ habitaciones, ipcActual, anioAjuste, onConfirm, onSkip }) {
       {/* Footer */}
       <div className="border-t border-border px-6 py-5 flex gap-3">
         <button
+          type="button"
           onClick={onSkip}
           className="flex-1 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-textMuted transition hover:bg-cardMuted"
         >
           Omitir este ano
         </button>
         <button
+          type="button"
           onClick={() => onConfirm(ipc, precios)}
           className="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition hover:opacity-90"
           style={{ background: 'var(--warning)', color: '#0f1923' }}
@@ -293,6 +297,7 @@ export default function NuevoMesModal({ onClose }) {
                 <div>
                   {isEnero && (
                     <button
+                      type="button"
                       onClick={() => setStep('ipc')}
                       className="mb-2 flex items-center gap-1 text-xs text-textMuted transition hover:text-textMain"
                     >
@@ -315,7 +320,9 @@ export default function NuevoMesModal({ onClose }) {
                   </p>
                 </div>
                 <button
+                  type="button"
                   onClick={handleDismiss}
+                  aria-label="Cerrar"
                   className="rounded-xl border border-border p-2 text-textMuted transition hover:bg-cardMuted hover:text-textMain"
                 >
                   <X className="h-4 w-4" />
@@ -357,6 +364,7 @@ export default function NuevoMesModal({ onClose }) {
                           }
                           onBlur={() => setEditingId(null)}
                           onKeyDown={(e) => e.key === 'Enter' && setEditingId(null)}
+                          aria-label={`Monto de ${servicio.nombre}`}
                           className="w-28 rounded-lg border border-border bg-cardMuted px-2 py-1 text-right font-mono text-sm text-textMain outline-none focus:border-primary"
                         />
                       ) : (
@@ -381,12 +389,14 @@ export default function NuevoMesModal({ onClose }) {
               </div>
               <div className="flex gap-3">
                 <button
+                  type="button"
                   onClick={handleDismiss}
                   className="flex-1 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-textMuted transition hover:bg-cardMuted"
                 >
                   Recordar despues
                 </button>
                 <button
+                  type="button"
                   onClick={handleConfirm}
                   className="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition hover:opacity-90"
                   style={{ background: 'var(--accent)', color: '#0f1923' }}
@@ -429,6 +439,7 @@ export default function NuevoMesModal({ onClose }) {
               </div>
             </div>
             <button
+              type="button"
               onClick={onClose}
               className="mt-6 w-full rounded-xl px-4 py-3 text-sm font-bold transition hover:opacity-90"
               style={{ background: 'var(--accent)', color: '#0f1923' }}

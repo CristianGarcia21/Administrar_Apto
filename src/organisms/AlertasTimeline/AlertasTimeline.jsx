@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { X } from 'lucide-react'
 import Badge from '../../atoms/Badge/Badge.jsx'
 import Button from '../../atoms/Button/Button.jsx'
@@ -44,7 +44,7 @@ export default function AlertasTimeline({ alertas, onDismiss, onViewAll, onActio
       </div>
       <div className="mt-5 space-y-3">
         {alertas.map((alerta, index) => (
-          <motion.div
+          <m.div
             key={alerta.id}
             custom={index}
             initial="hidden"
@@ -89,7 +89,7 @@ export default function AlertasTimeline({ alertas, onDismiss, onViewAll, onActio
                 </Button>
               )}
             </div>
-          </motion.div>
+          </m.div>
         ))}
       </div>
     </section>

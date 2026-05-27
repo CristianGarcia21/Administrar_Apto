@@ -2,7 +2,7 @@ import { useMemo, useEffect } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import {
   BarChart3,
   BedDouble,
@@ -139,7 +139,7 @@ export default function DashboardLayout() {
                 {({ isActive }) => (
                   <>
                     {isActive && (
-                      <motion.div
+                      <m.div
                         layoutId="activeNavIndicator"
                         className="absolute inset-0 rounded-xl"
                         style={{ background: 'var(--accent)', zIndex: 0 }}
@@ -220,6 +220,8 @@ export default function DashboardLayout() {
           {/* Month Switcher Central */}
           <div className="flex items-center rounded-xl border border-border bg-card p-1 shadow-sm">
             <button
+              type="button"
+              aria-label="Mes anterior"
               onClick={() => navigateMonth(-1)}
               className="flex h-8 w-8 items-center justify-center rounded-lg text-textMuted transition hover:bg-cardMuted hover:text-textMain"
             >
@@ -229,6 +231,7 @@ export default function DashboardLayout() {
               <span className="text-sm font-bold capitalize text-textMain">{visLabel}</span>
               {!isCurrentMonth ? (
                 <button
+                  type="button"
                   onClick={() => setMesVisualizado(mesActivo)}
                   className="text-[10px] font-semibold uppercase tracking-wider text-accent transition hover:opacity-80"
                 >
@@ -241,6 +244,8 @@ export default function DashboardLayout() {
               )}
             </div>
             <button
+              type="button"
+              aria-label="Mes siguiente"
               onClick={() => navigateMonth(1)}
               className="flex h-8 w-8 items-center justify-center rounded-lg text-textMuted transition hover:bg-cardMuted hover:text-textMain"
             >
@@ -267,7 +272,7 @@ export default function DashboardLayout() {
         </header>
 
         <main className="flex-1 px-4 py-6 md:px-8 relative">
-          <motion.div
+          <m.div
             key={location.pathname}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -275,7 +280,7 @@ export default function DashboardLayout() {
             className="pb-20 md:pb-0" // Espacio extra en movil para no tapar contenido con la barra inferior
           >
             <Outlet />
-          </motion.div>
+          </m.div>
         </main>
       </div>
 
@@ -298,7 +303,7 @@ export default function DashboardLayout() {
               className="group relative flex flex-shrink-0 flex-col items-center justify-center p-2 w-[60px] h-[52px] transition-colors"
             >
               {isActive && (
-                <motion.div
+                <m.div
                   layoutId="mobileNavIndicator"
                   className="absolute inset-1 rounded-xl"
                   style={{ background: 'var(--accent-dim)', zIndex: 0 }}

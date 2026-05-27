@@ -40,10 +40,11 @@ export default function HabitacionModal({
       onClose={onClose}
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 mt-2">
-        
+
         <div className="relative">
-          <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Nombre de la habitacion</label>
+          <label htmlFor="hab-nombre" className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Nombre de la habitacion</label>
           <input
+            id="hab-nombre"
             {...register('nombre')}
             className="w-full rounded-xl border border-border bg-cardMuted/30 px-4 py-3.5 text-sm font-semibold text-textMain shadow-sm outline-none transition-all focus:border-[color:var(--accent)] focus:bg-card focus:ring-4 focus:ring-[color:var(--accent-dim)]"
           />
@@ -54,8 +55,9 @@ export default function HabitacionModal({
 
         <div className="grid gap-5 md:grid-cols-2">
           <div className="relative">
-            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Precio actual (COP)</label>
+            <label htmlFor="hab-precio" className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Precio actual (COP)</label>
             <input
+              id="hab-precio"
               type="number"
               {...register('precioActual', { valueAsNumber: true })}
               className="w-full rounded-xl border border-border bg-cardMuted/30 px-4 py-3.5 font-mono text-sm font-bold text-textMain shadow-sm outline-none transition-all focus:border-[color:var(--accent)] focus:bg-card focus:ring-4 focus:ring-[color:var(--accent-dim)]"
@@ -63,8 +65,9 @@ export default function HabitacionModal({
           </div>
 
           <div className="relative">
-            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Estado</label>
+            <label htmlFor="hab-estado" className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Estado</label>
             <select
+              id="hab-estado"
               {...register('estado')}
               className="w-full appearance-none rounded-xl border border-border bg-cardMuted/30 px-4 py-3.5 text-sm font-semibold text-textMain shadow-sm outline-none transition-all focus:border-[color:var(--accent)] focus:bg-card focus:ring-4 focus:ring-[color:var(--accent-dim)]"
             >
@@ -75,9 +78,10 @@ export default function HabitacionModal({
           </div>
 
           <div className="relative md:col-span-2">
-            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Color de etiqueta</label>
+            <label htmlFor="hab-color" className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Color de etiqueta</label>
             <div className="flex items-center gap-3">
               <input
+                id="hab-color"
                 type="color"
                 {...register('color')}
                 className="h-12 w-16 cursor-pointer rounded-xl border border-border bg-card shadow-sm"
@@ -88,8 +92,9 @@ export default function HabitacionModal({
         </div>
 
         <div className="relative pt-2">
-          <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Descripcion / Notas</label>
+          <label htmlFor="hab-descripcion" className="mb-2 block text-[11px] font-bold uppercase tracking-[0.15em] text-textMuted">Descripcion / Notas</label>
           <textarea
+            id="hab-descripcion"
             {...register('descripcion')}
             rows={3}
             className="w-full resize-none rounded-xl border border-border bg-cardMuted/30 px-4 py-3.5 text-sm font-semibold text-textMain shadow-sm outline-none transition-all focus:border-[color:var(--accent)] focus:bg-card focus:ring-4 focus:ring-[color:var(--accent-dim)]"

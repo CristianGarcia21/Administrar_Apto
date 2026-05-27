@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { AlertTriangle, X } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 /**
  * Modal de confirmacion reutilizable — reemplaza window.confirm().
@@ -26,7 +26,7 @@ export default function ConfirmModal({
       className="fixed inset-0 z-[60] flex items-center justify-center p-4"
     >
       {/* Backdrop */}
-      <motion.div
+      <m.div
         className="absolute inset-0 bg-black/65 backdrop-blur-sm"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -36,7 +36,7 @@ export default function ConfirmModal({
       />
 
       {/* Card */}
-      <motion.div
+      <m.div
         className="relative w-full max-w-sm overflow-hidden rounded-2xl border border-border"
         initial={{ opacity: 0, scale: 0.95, y: 8 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -93,7 +93,7 @@ export default function ConfirmModal({
         >
           <X className="h-3.5 w-3.5" />
         </button>
-      </motion.div>
+      </m.div>
     </div>
   )
 }

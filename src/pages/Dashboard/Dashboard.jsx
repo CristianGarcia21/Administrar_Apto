@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import {
   CalendarCheck,
   Wallet,
@@ -193,13 +193,13 @@ export default function Dashboard() {
     <div className="space-y-6">
 
       {/* ── Bienvenida ── */}
-      <motion.div {...fadeUp(0)}>
+      <m.div {...fadeUp(0)}>
         <DashboardHeader nombre={nombre} />
-      </motion.div>
+      </m.div>
 
       {/* ── Banner "Iniciar mes" cuando hay rollover pendiente ── */}
       {pendingRollover && (
-        <motion.div {...fadeUp(0.05)}>
+        <m.div {...fadeUp(0.05)}>
           <button
             onClick={() => setShowNuevoMes(true)}
             className="group relative w-full overflow-hidden rounded-2xl border text-left transition-all duration-300 hover:shadow-xl"
@@ -240,11 +240,11 @@ export default function Dashboard() {
               </div>
             </div>
           </button>
-        </motion.div>
+        </m.div>
       )}
 
       {/* ── KPIs ── */}
-      <motion.section
+      <m.section
         {...fadeUp(0.1)}
         className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
       >
@@ -281,10 +281,10 @@ export default function Dashboard() {
           tone={margenNeto >= 0 ? 'info' : 'danger'}
           onClick={() => navigate('/reportes')}
         />
-      </motion.section>
+      </m.section>
 
       {/* ── Estado del mes actual ── */}
-      <motion.section {...fadeUp(0.15)}>
+      <m.section {...fadeUp(0.15)}>
         <div
           className="rounded-2xl border border-border bg-card px-6 py-5"
           style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}
@@ -295,6 +295,7 @@ export default function Dashboard() {
               <h2 className="mt-1 text-xl font-semibold capitalize">{mesLabel}</h2>
             </div>
             <button
+              type="button"
               onClick={() => navigate('/servicios')}
               className="text-xs font-semibold text-textMuted transition hover:text-textMain"
             >
@@ -343,10 +344,10 @@ export default function Dashboard() {
             </p>
           )}
         </div>
-      </motion.section>
+      </m.section>
 
       {/* ── Alertas ── */}
-      <motion.div {...fadeUp(0.2)}>
+      <m.div {...fadeUp(0.2)}>
         <AlertasTimeline
           alertas={alertas}
           onDismiss={dismissAlert}
@@ -360,10 +361,10 @@ export default function Dashboard() {
             navigate('/reportes')
           }}
         />
-      </motion.div>
+      </m.div>
 
       {/* ── Acciones rápidas ── */}
-      <motion.section {...fadeUp(0.25)}>
+      <m.section {...fadeUp(0.25)}>
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-lg font-semibold">Acciones rápidas</h2>
           <p className="text-xs text-textMuted">En menos de 30 segundos</p>
@@ -398,10 +399,10 @@ export default function Dashboard() {
             onClick={() => setShowNuevoMes(true)}
           />
         </div>
-      </motion.section>
+      </m.section>
 
       {/* ── Resumen cobros por inquilino ── */}
-      <motion.section {...fadeUp(0.3)}>
+      <m.section {...fadeUp(0.3)}>
         <div
           className="rounded-2xl border border-border bg-card px-6 py-5"
           style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}
@@ -412,6 +413,7 @@ export default function Dashboard() {
               <h2 className="mt-1 text-lg font-semibold">Estado por inquilino</h2>
             </div>
             <button
+              type="button"
               onClick={() => navigate('/pagos')}
               className="text-xs font-semibold text-textMuted transition hover:text-textMain"
             >
@@ -478,7 +480,7 @@ export default function Dashboard() {
             )}
           </div>
         </div>
-      </motion.section>
+      </m.section>
 
       {/* ── Modals ── */}
       <AnimatePresence>

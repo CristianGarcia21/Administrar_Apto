@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import toast, { Toaster, resolveValue } from 'react-hot-toast'
-import { motion } from 'framer-motion'
+import { LazyMotion, domAnimation, m } from 'framer-motion'
 import { CheckCircle2, XCircle, Info, X } from 'lucide-react'
 import DashboardLayout from './templates/DashboardLayout/DashboardLayout.jsx'
 
@@ -14,25 +14,25 @@ function CustomToast({ toast: t }) {
 
   if (t.type === 'success') {
     icon = (
-      <motion.div
+      <m.div
         initial={{ scale: 0.6, rotate: -45 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ type: 'spring', stiffness: 200, damping: 10 }}
       >
         <CheckCircle2 className="h-5 w-5 text-green-400" />
-      </motion.div>
+      </m.div>
     )
     progressBg = 'var(--positive)'
     borderGlow = 'rgba(34, 197, 94, 0.25)'
   } else if (t.type === 'error') {
     icon = (
-      <motion.div
+      <m.div
         initial={{ scale: 0.6, x: -10 }}
         animate={{ scale: 1, x: 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 12 }}
       >
         <XCircle className="h-5 w-5 text-red-400" />
-      </motion.div>
+      </m.div>
     )
     progressBg = 'var(--danger)'
     borderGlow = 'rgba(239, 68, 68, 0.25)'
@@ -45,7 +45,7 @@ function CustomToast({ toast: t }) {
   }
 
   return (
-    <motion.div
+    <m.div
       layout
       initial={{ opacity: 0, y: -16, scale: 0.94 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -66,16 +66,18 @@ function CustomToast({ toast: t }) {
           {message}
         </div>
         <button
+          type="button"
           onClick={() => toast.dismiss(t.id)}
+          aria-label="Cerrar notificación"
           className="flex-shrink-0 text-textMuted hover:text-textMain transition-colors rounded-lg p-0.5 hover:bg-cardMuted"
         >
           <X className="h-3.5 w-3.5" />
         </button>
       </div>
-      
+
       {/* ProgressBar */}
       {t.type !== 'loading' && (
-        <motion.div
+        <m.div
           initial={{ width: '100%' }}
           animate={{ width: '0%' }}
           transition={{ duration: (t.duration || 4000) / 1000, ease: 'linear' }}
@@ -83,7 +85,7 @@ function CustomToast({ toast: t }) {
           style={{ background: progressBg }}
         />
       )}
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -115,6 +117,7 @@ function PageSkeleton() {
 
 function App() {
   return (
+    <LazyMotion features={domAnimation}>
     <BrowserRouter>
       <Toaster position="top-right">
         {(t) => <CustomToast toast={t} />}
@@ -132,6 +135,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
+    </LazyMotion>
   )
 }
 

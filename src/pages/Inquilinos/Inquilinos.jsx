@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Plus, Users, CheckCircle2, Clock, AlertCircle } from 'lucide-react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import InquilinosTable from '../../organisms/InquilinosTable/InquilinosTable.jsx'
 import { useInquilinosStore } from '../../store/inquilinosStore.js'
 import { useHabitacionesStore } from '../../store/habitacionesStore.js'
@@ -183,7 +183,7 @@ export default function Inquilinos() {
         >
           Inquilinos Activos
           {activeTab === 'activos' && (
-            <motion.div
+            <m.div
               layoutId="activeTabUnderline"
               className="absolute bottom-0 left-0 right-0 h-[2px]"
               style={{ background: 'var(--accent)' }}
@@ -200,7 +200,7 @@ export default function Inquilinos() {
         >
           Historial de Salidas
           {activeTab === 'salidas' && (
-            <motion.div
+            <m.div
               layoutId="activeTabUnderline"
               className="absolute bottom-0 left-0 right-0 h-[2px]"
               style={{ background: 'var(--accent)' }}
